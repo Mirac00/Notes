@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<NotesDbContext>(options => options.UseSqlServer(
+builder.Services.AddDbContext<TableDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("NotesDbConnectionString")));
 
 var app = builder.Build();
