@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using Notes.API.Data;
@@ -6,10 +7,12 @@ using Notes.API.Models.Entities;
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Notes.API.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]")]
     public class Event111sController : ControllerBase

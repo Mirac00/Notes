@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using Notes.API.Data;
@@ -28,9 +29,6 @@ namespace Notes.API.Controllers
         [ActionName("GetNoteById")]
         public async Task<IActionResult> GetNoteById([FromRoute] Guid id)
         {
-            //await TableDbContext.Notes.FirstOrDefaultAsync(x =>x.ID == id);
-            // or
-
             var note = await TableDbContext.Notes.FindAsync(id);
 
             if (note == null)
@@ -42,6 +40,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddNote(Note note)
         {
             note.Id = Guid.NewGuid();
@@ -53,6 +52,7 @@ namespace Notes.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> UpdateNote([FromRoute] Guid id, [FromBody] Note updatedNote)
         {
             var existingNote = await TableDbContext.Notes.FindAsync(id);
@@ -73,6 +73,7 @@ namespace Notes.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> DeleteNote([FromRoute] Guid id)
         {
             var existingNote = await TableDbContext.Notes.FindAsync(id);
