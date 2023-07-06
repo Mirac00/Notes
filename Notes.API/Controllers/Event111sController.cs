@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
+
+
 namespace Notes.API.Controllers
 {
 
@@ -25,6 +27,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpGet]
+
         public async Task<IActionResult> GetAllEvents()
         {
             List<Event111> events = await _tableDbContext.Event111s.ToListAsync();
@@ -32,6 +35,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpGet("{id:Guid}")]
+
         public async Task<IActionResult> GetEventById(Guid id)
         {
             Event111 event111 = await _tableDbContext.Event111s.FindAsync(id);
@@ -45,6 +49,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> AddEvent(Event111 event111)
         {
             event111.Id = Guid.NewGuid();
@@ -55,6 +60,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpPut("{id:Guid}")]
+
         public async Task<IActionResult> UpdateEvent(Guid id, Event111 updatedEvent)
         {
             Event111 existingEvent = await _tableDbContext.Event111s.FindAsync(id);
@@ -76,6 +82,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpDelete("{id:Guid}")]
+
         public async Task<IActionResult> DeleteEvent(Guid id)
         {
             Event111 existingEvent = await _tableDbContext.Event111s.FindAsync(id);
