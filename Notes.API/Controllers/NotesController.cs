@@ -40,7 +40,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "writer")]
+
         public async Task<IActionResult> AddNote(Note note)
         {
             note.Id = Guid.NewGuid();
@@ -52,7 +52,7 @@ namespace Notes.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "reader")]
+
         public async Task<IActionResult> UpdateNote([FromRoute] Guid id, [FromBody] Note updatedNote)
         {
             var existingNote = await TableDbContext.Notes.FindAsync(id);
@@ -73,7 +73,7 @@ namespace Notes.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "reader")]
+
         public async Task<IActionResult> DeleteNote([FromRoute] Guid id)
         {
             var existingNote = await TableDbContext.Notes.FindAsync(id);
