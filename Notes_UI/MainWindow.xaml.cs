@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
+using TwoWindowApp;
+
 namespace Notes_UI
 {
     public partial class MainWindow : Window
@@ -34,9 +36,9 @@ namespace Notes_UI
         private void OpenLoginWindow_Click(object sender, RoutedEventArgs e)
         {
             // Pokaż okno logowania i ukryj bieżące okno
-         //   LoginWindow loginWindow = new LoginWindow();
-         //   loginWindow.Show();
-         //   this.Hide();
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            this.Hide();
         }
     }
 }
