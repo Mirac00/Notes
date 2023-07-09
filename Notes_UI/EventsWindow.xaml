@@ -13,9 +13,11 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0">
-            <Button Width="108" Height="50" Content="Dodaj wydarzenie" Click="AddEvent_Click"/>
-            <Button x:Name="updateButton" Width="80" Height="50" Content="Zapisz" Click="UpdateEvent_Click" Visibility="Collapsed"/>
-            <Button x:Name="deleteButton" Width="80" Height="50" Content="Usuń" Click="DeleteEvent_Click" Visibility="Collapsed"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Width="108" Height="50" Content="Dodaj wydarzenie" Click="AddEvent_Click"/>
+                <Button x:Name="updateButton" Width="80" Height="50" Content="Zapisz" Click="UpdateEvent_Click" Visibility="Collapsed"/>
+                <Button x:Name="deleteButton" Width="80" Height="50" Content="Usuń" Click="DeleteEvent_Click" Visibility="Collapsed"/>
+            </StackPanel>
 
             <ListBox x:Name="eventsListBox" Margin="0,10,0,0" SelectionChanged="EventsListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
@@ -43,4 +45,5 @@
         </StackPanel>
     </Grid>
 </Window>
+
 
