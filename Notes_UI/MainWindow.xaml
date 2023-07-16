@@ -4,11 +4,11 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <TextBlock Text="Zalogowany użytkownik:" Margin="10"/>
             <Button Content="Notatki" Click="OpenNotesWindow_Click"/>
-            <TextBlock Text="{Binding loggedInUser}" Margin="10"/>
             <Button Content="Wydarzenia" Click="OpenEventsWindow_Click" Height="33"/>
-            <Button Content="Zaloguj" Click="OpenLoginWindow_Click"/>
+            <Button x:Name="LoginButton" Content="Zaloguj" Click="OpenLoginWindow_Click"/>
+            <Button x:Name="LogoutButton" Content="Wyloguj" Click="LogoutButton_Click" Visibility="Collapsed"/>
+            <Label x:Name="LoggedInUserLabel" Content="" />
         </StackPanel>
         <ScrollViewer Margin="0,142,0,-40">
             <StackPanel Orientation="Vertical" Margin="15" Height="877">

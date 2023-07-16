@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -11,13 +13,32 @@ namespace Notes_UI
 {
     public static class ApiClient
     {
-        private static HttpClient client = new HttpClient();
+        private static CookieContainer cookieContainer = new CookieContainer();
+        private static HttpClientHandler handler = new HttpClientHandler { UseCookies = true, CookieContainer = cookieContainer };
+        private static HttpClient client = new HttpClient(handler);
 
         static ApiClient()
         {
             client.BaseAddress = new Uri("https://localhost:7202/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        public static void SetCookies(Uri uri, IEnumerable<Cookie> cookies)
+        {
+            // Ustawienie plików cookie dla określonego URI
+            foreach (var cookie in cookies)
+            {
+                cookieContainer.Add(uri, cookie);
+            }
+        }
+
+        public static string GetAntiForgeryCookie()
+        {
+            // Pobranie wartości pliku cookie antyprzekierowania
+            var cookies = cookieContainer.GetCookies(client.BaseAddress);
+            var antiForgeryCookie = cookies[".AspNetCore.Antiforgery"]?.Value;
+            return antiForgeryCookie;
         }
 
         public static async Task<List<Note>> GetAllNotes()
@@ -103,8 +124,7 @@ namespace Notes_UI
         public string Description { get; set; }
         public bool IsVisible { get; set; }
     }
-
-    // Podobnie zaimplementuj obsługę wydarzeń (Events) z API
-    // Możesz utworzyć analogiczną klasę ApiClient dla wydarzeń i odpowiednio dostosować metody
-    // (GetAllEvents, GetEventById, AddEvent, UpdateEvent, DeleteEvent).
 }
+
+
+

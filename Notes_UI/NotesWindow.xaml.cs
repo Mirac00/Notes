@@ -8,11 +8,15 @@ namespace Notes_UI
     public partial class NotesWindow : Window
     {
         public Note SelectedNote { get; set; }
+        private string _loggedInUser;
 
-        public NotesWindow()
+        public NotesWindow(string loggedInUser)
         {
             InitializeComponent();
             DataContext = this;
+
+            // Zapisanie nazwy zalogowanego użytkownika
+            _loggedInUser = loggedInUser;
 
             RefreshNotes();
         }
@@ -121,4 +125,6 @@ namespace Notes_UI
 
     }
 }
+
+
 

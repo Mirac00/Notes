@@ -1,76 +1,70 @@
-﻿using Notes_UI;
-
-using System;
+﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Windows;
 
-namespace TwoWindowApp
+namespace Notes_UI
 {
     public partial class LoginWindow : Window
     {
-        private string loggedInUser;
-        private DateTime loginTime;
-        private TimeSpan sessionDuration = TimeSpan.FromHours(1);
+        private readonly HttpClient _client = new HttpClient();
 
         public LoginWindow()
         {
             InitializeComponent();
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string login = loginTextBox.Text;
-            string password = passwordBox.Password;
+            // Pobranie pliku cookie antyprzekierowania
+            await _client.GetAsync("https://localhost:7202/Account/Login");
+            var antiForgeryToken = ApiClient.GetAntiForgeryCookie();
 
-            if (isValidLogin(login, password))
+            var loginModel = new
             {
-                loggedInUser = login;
-                loginTime = DateTime.Now;
+                UserName = UsernameTextBox.Text,
+                Password = PasswordBox.Password
+            };
 
-                if (CheckSessionExpiration())
-                {
-                    MessageBox.Show("Sesja wygasła. Zaloguj się ponownie.");
-                    return;
-                }
+            var json = JsonSerializer.Serialize(loginModel);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                MessageBox.Show("Poprawnie zalogowano!");
+            // Ustawienie nagłówka RequestVerificationToken z wartością pliku cookie antyprzekierowania
+            content.Headers.Add("RequestVerificationToken", antiForgeryToken);
 
-                MainWindow mainWindow = new MainWindow(loggedInUser);
+            var response = await _client.PostAsync("https://localhost:7202/Account/Login", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Pobranie plików cookie z odpowiedzi API
+                var cookies = response.Headers.GetValues("Set-Cookie");
+
+                // Przekazanie plików cookie do klasy ApiClient
+                ApiClient.SetCookies(response.RequestMessage.RequestUri, cookies.Select(c => new Cookie(c.Split('=')[0], c.Split('=')[1].Split(';')[0])));
+
+                var mainWindow = new MainWindow(loginModel.UserName);
                 mainWindow.Show();
-
                 Close();
             }
             else
             {
-                MessageBox.Show("Niepoprawny login lub hasło!");
+                MessageBox.Show("Invalid login attempt.");
             }
-        }
-
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            RegisterWindow registerWindow = new RegisterWindow();
-            registerWindow.Show();
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-
-            Close();
-        }
-
-        private bool isValidLogin(string login, string password)
-        {
-            // Wykonaj logikę weryfikacji loginu i hasła
-            return login == password;
-        }
-
-        private bool CheckSessionExpiration()
-        {
-            return DateTime.Now - loginTime > sessionDuration;
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

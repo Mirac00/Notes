@@ -1,11 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-using Notes.API.Data;
 using Notes.API.Models.Entities;
 
 namespace Notes.API.Controllers
@@ -59,6 +54,8 @@ namespace Notes.API.Controllers
         }
     }
 }
+
+
 
 
 

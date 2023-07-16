@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Notes_UI
+using Newtonsoft.Json;
+
+namespace Notes_UI.Services
 {
     public class AccountService
     {
@@ -11,37 +13,40 @@ namespace Notes_UI
 
         public AccountService()
         {
-            _client = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7202/")
-            };
+            _client = new HttpClient();
+            _client.BaseAddress = new System.Uri("https://localhost:7202/api/");
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<bool> Login(string userName, string password)
+        public async Task<bool> RegisterAsync(string userName, string password)
         {
-            var content = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("UserName", userName),
-                new KeyValuePair<string, string>("Password", password)
-            });
+            var model = new { UserName = userName, Password = password };
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var result = await _client.PostAsync("/Account/login", content);
+            var response = await _client.PostAsync("account/register", content);
 
-            return result.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> Register(string userName, string password)
+        public async Task<bool> LoginAsync(string userName, string password)
         {
-            var content = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("UserName", userName),
-                new KeyValuePair<string, string>("Password", password)
-            });
+            var model = new { UserName = userName, Password = password };
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var result = await _client.PostAsync("/Account/register", content);
+            var response = await _client.PostAsync("account/login", content);
 
-            return result.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _client.PostAsync("account/logout", null);
         }
     }
 }
+
+
 

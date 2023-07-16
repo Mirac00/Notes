@@ -1,12 +1,12 @@
-﻿using System.Windows;
-
-using TwoWindowApp;
+﻿using System.Net.Http;
+using System.Windows;
 
 namespace Notes_UI
 {
     public partial class MainWindow : Window
     {
-        private string loggedInUser;
+        private readonly HttpClient _client = new HttpClient();
+        private string _loggedInUser;
 
         public MainWindow()
         {
@@ -16,12 +16,16 @@ namespace Notes_UI
         public MainWindow(string loggedInUser)
         {
             InitializeComponent();
-            this.loggedInUser = loggedInUser;
+
+            // Zapisanie nazwy zalogowanego użytkownika i aktualizacja interfejsu użytkownika
+            _loggedInUser = loggedInUser;
+            UpdateUI();
         }
 
         private void OpenNotesWindow_Click(object sender, RoutedEventArgs e)
         {
-            NotesWindow notesWindow = new NotesWindow();
+            // Przekazanie nazwy zalogowanego użytkownika do konstruktora okna NotesWindow
+            NotesWindow notesWindow = new NotesWindow(_loggedInUser);
             notesWindow.Show();
             this.Hide();
         }
@@ -39,6 +43,44 @@ namespace Notes_UI
             loginWindow.Show();
             this.Hide();
         }
+
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Wylogowanie użytkownika za pomocą API
+            var response = await _client.PostAsync("https://localhost:7202/Account/logout", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Wyczyszczenie nazwy zalogowanego użytkownika i aktualizacja interfejsu użytkownika
+                _loggedInUser = null;
+                UpdateUI();
+            }
+            else
+            {
+                MessageBox.Show("Logout failed.");
+            }
+        }
+
+        private void UpdateUI()
+        {
+            if (!string.IsNullOrEmpty(_loggedInUser))
+            {
+                // Użytkownik jest zalogowany
+                LoginButton.Visibility = Visibility.Collapsed;
+                LogoutButton.Visibility = Visibility.Visible;
+                LoggedInUserLabel.Content = $"Zalogowany jako: {_loggedInUser}";
+            }
+            else
+            {
+                // Użytkownik nie jest zalogowany
+                LoginButton.Visibility = Visibility.Visible;
+                LogoutButton.Visibility = Visibility.Collapsed;
+                LoggedInUserLabel.Content = "";
+            }
+        }
     }
 }
+
+
+
 
