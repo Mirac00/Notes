@@ -40,7 +40,7 @@ namespace Notes.API.Controllers
         }
 
         [HttpPost]
-
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> AddNote(Note note)
         {
             note.Id = Guid.NewGuid();

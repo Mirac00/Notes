@@ -1,8 +1,10 @@
-﻿namespace Notes.API.Models.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class Role
+using System.Collections.Generic;
+namespace Notes.API.Models.Entities
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public List<User_Role> UserRoles { get; set; }
+    public class Role : IdentityRole<Guid>
+    {
+    }
 }
+

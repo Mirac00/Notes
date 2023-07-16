@@ -1,11 +1,16 @@
 ﻿using Notes_UI;
 
+using System;
 using System.Windows;
 
 namespace TwoWindowApp
 {
     public partial class LoginWindow : Window
     {
+        private string loggedInUser;
+        private DateTime loginTime;
+        private TimeSpan sessionDuration = TimeSpan.FromHours(1);
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -13,48 +18,59 @@ namespace TwoWindowApp
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            // Pobierz wartości z pól loginu i hasła
             string login = loginTextBox.Text;
             string password = passwordBox.Password;
 
-            // Wykonaj logikę weryfikacji loginu i hasła
-
             if (isValidLogin(login, password))
             {
-                // Jeśli login i hasło są poprawne, wykonaj odpowiednie działania
+                loggedInUser = login;
+                loginTime = DateTime.Now;
 
-                // Przykładowe działanie: Wyświetlenie komunikatu o poprawnym zalogowaniu
+                if (CheckSessionExpiration())
+                {
+                    MessageBox.Show("Sesja wygasła. Zaloguj się ponownie.");
+                    return;
+                }
+
                 MessageBox.Show("Poprawnie zalogowano!");
 
-                // Tutaj możesz wykonać inne działania, takie jak otwarcie głównego okna aplikacji, itp.
+                MainWindow mainWindow = new MainWindow(loggedInUser);
+                mainWindow.Show();
 
-                // Zamknij okno logowania
                 Close();
             }
             else
             {
-                // Jeśli login i hasło są niepoprawne, wyświetl komunikat o błędzie
                 MessageBox.Show("Niepoprawny login lub hasło!");
             }
         }
 
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterWindow registerWindow = new RegisterWindow();
+            registerWindow.Show();
+        }
+
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            // Otwórz ponownie główne okno (MainWindow)
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
 
-            // Zamknij obecne okno (LoginWindow)
             Close();
         }
 
-        // Przykładowa metoda weryfikująca login i hasło
         private bool isValidLogin(string login, string password)
         {
-            // Tutaj możesz napisać swoją logikę weryfikacji loginu i hasła
-            // Na potrzeby przykładu zwrócę true jeśli login i hasło są takie same
+            // Wykonaj logikę weryfikacji loginu i hasła
             return login == password;
+        }
+
+        private bool CheckSessionExpiration()
+        {
+            return DateTime.Now - loginTime > sessionDuration;
         }
     }
 }
+
+
 

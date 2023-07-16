@@ -1,17 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 
-namespace Notes.API.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 
-public class User
+namespace Notes.API.Models.Entities
 {
-    public Guid Id { get; set; }
-    public string UserName { get; set; }
-    public string EmailAdress { get; set; }
-    public string Password { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    [NotMapped]
-    public List<string> Roles { get; set; }
-    public List<User_Role> UserRoles { get; set; }
-    
+    public class User : IdentityUser<Guid>
+    {
+        public ICollection<IdentityUserRole<Guid>> Roles { get; set; }
+    }
 }

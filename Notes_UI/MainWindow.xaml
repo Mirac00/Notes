@@ -1,48 +1,46 @@
 ﻿<Window x:Class="Notes_UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Notes_UI"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="567" Width="1014">
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,10,733,469">
-            <Button Width="80" Height="50" Content="Notatki" Click="OpenNotesWindow_Click"/>
-            <Button Width="80" Height="50" Content="Wydarzenia" Click="OpenEventsWindow_Click"/>
-            <Button Width="80" Height="50" Content="Zaloguj" Click="OpenLoginWindow_Click"/>
+        <StackPanel>
+            <TextBlock Text="Zalogowany użytkownik:" Margin="10"/>
+            <Button Content="Notatki" Click="OpenNotesWindow_Click"/>
+            <TextBlock Text="{Binding loggedInUser}" Margin="10"/>
+            <Button Content="Wydarzenia" Click="OpenEventsWindow_Click" Height="33"/>
+            <Button Content="Zaloguj" Click="OpenLoginWindow_Click"/>
         </StackPanel>
-        <ScrollViewer Margin="0,102,0,0">
-        <StackPanel Orientation="Vertical" Margin="15" Height="877">
-            <TextBlock Text="Dokumentacja aplikacji NoteEventApp" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-            <TextBlock Text="Opis ogólny:" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock Text="Aplikacja 'NoteEventApp' jest prostym narzędziem, które umożliwia użytkownikom tworzenie notatek i dodawanie wydarzeń. Zapewnia także system logowania i rejestracji użytkowników oraz podział na role. Aplikacja składa się z dwóch głównych części: strony logicznej API napisanej w technologii .NET 6 z wykorzystaniem Entity Framework oraz bazy danych MySQL, oraz interfejsu użytkownika (.xaml) umożliwiającego interakcję z notatkami, wydarzeniami oraz procesami logowania i rejestracji." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+        <ScrollViewer Margin="0,142,0,-40">
+            <StackPanel Orientation="Vertical" Margin="15" Height="877">
+                <TextBlock Text="Dokumentacja aplikacji NoteEventApp" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="Opis ogólny:" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="Aplikacja 'NoteEventApp' jest prostym narzędziem, które umożliwia użytkownikom tworzenie notatek i dodawanie wydarzeń. Zapewnia także system logowania i rejestracji użytkowników oraz podział na role. Aplikacja składa się z dwóch głównych części: strony logicznej API napisanej w technologii .NET 6 z wykorzystaniem Entity Framework oraz bazy danych MySQL, oraz interfejsu użytkownika (.xaml) umożliwiającego interakcję z notatkami, wydarzeniami oraz procesami logowania i rejestracji." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Strona logiczna (API):" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock Text="Technologia: Aplikacja została napisana w .NET 6 z wykorzystaniem Entity Framework jako ORM (Object-Relational Mapping)." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="Baza danych: Aplikacja korzysta z bazy danych MySQL do przechowywania danych użytkowników, notatek i wydarzeń." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="Autoryzacja i uwierzytelnianie: Aplikacja implementuje system logowania i rejestracji użytkowników z wykorzystaniem mechanizmu uwierzytelniania opartego na tokenach (np. JWT - JSON Web Tokens). Użytkownicy są autoryzowani do wykonywania operacji na notatkach i wydarzeniach na podstawie ich ról." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                <TextBlock Text="Strona logiczna (API):" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="Technologia: Aplikacja została napisana w .NET 6 z wykorzystaniem Entity Framework jako ORM (Object-Relational Mapping)." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="Baza danych: Aplikacja korzysta z bazy danych MySQL do przechowywania danych użytkowników, notatek i wydarzeń." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="Autoryzacja i uwierzytelnianie: Aplikacja implementuje system logowania i rejestracji użytkowników z wykorzystaniem mechanizmu uwierzytelniania opartego na tokenach (np. JWT - JSON Web Tokens). Użytkownicy są autoryzowani do wykonywania operacji na notatkach i wydarzeniach na podstawie ich ról." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Endpointy API:" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock Text="GET /api/notes: Zwraca listę notatek użytkownika." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="POST /api/notes: Dodaje nową notatkę do bazy danych." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="GET /api/events: Zwraca listę wydarzeń użytkownika." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="POST /api/events: Dodaje nowe wydarzenie do bazy danych." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="POST /api/register: Rejestruje nowego użytkownika w systemie." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="POST /api/login: Loguje użytkownika do systemu i zwraca token uwierzytelniający." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                <TextBlock Text="Endpointy API:" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="GET /api/notes: Zwraca listę notatek użytkownika." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="POST /api/notes: Dodaje nową notatkę do bazy danych." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="GET /api/events: Zwraca listę wydarzeń użytkownika." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="POST /api/events: Dodaje nowe wydarzenie do bazy danych." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="POST /api/register: Rejestruje nowego użytkownika w systemie." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="POST /api/login: Loguje użytkownika do systemu i zwraca token uwierzytelniający." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Interfejs użytkownika (.xaml):" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock Text="Technologia: Interfejs użytkownika został zaimplementowany w języku XAML (Extensible Application Markup Language)." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="Okno notatek: Wyświetla listę notatek użytkownika. Umożliwia dodawanie, edycję i usuwanie notatek." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="Okno wydarzeń: Wyświetla listę wydarzeń użytkownika. Umożliwia dodawanie, edycję i usuwanie wydarzeń." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="Formularz logowania: Umożliwia użytkownikowi wprowadzenie swoich danych logowania w celu uzyskania dostępu do aplikacji." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
-            <TextBlock Text="Formularz rejestracji: Umożliwia użytkownikowi utworzenie nowego konta w systemie poprzez podanie wymaganych informacji." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                <TextBlock Text="Interfejs użytkownika (.xaml):" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text="Technologia: Interfejs użytkownika został zaimplementowany w języku XAML (Extensible Application Markup Language)." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="Okno notatek: Wyświetla listę notatek użytkownika. Umożliwia dodawanie, edycję i usuwanie notatek." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="Okno wydarzeń: Wyświetla listę wydarzeń użytkownika. Umożliwia dodawanie, edycję i usuwanie wydarzeń." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="Formularz logowania: Umożliwia użytkownikowi wprowadzenie swoich danych logowania w celu uzyskania dostępu do aplikacji." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                <TextBlock Text="Formularz rejestracji: Umożliwia użytkownikowi utworzenie nowego konta w systemie poprzez podanie wymaganych informacji." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Wymagania systemowe:" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
-            <TextBlock Text=".NET 6 SDK" FontSize="12" Margin="0,0,0,3"/>
-            <TextBlock Text="MySQL Server" FontSize="12" Margin="0,0,0,3"/>
-            <TextBlock Text="Środowisko deweloperskie, takie jak Visual Studio lub Visual Studio Code, z zainstalowanymi odpowiednimi rozszerzeniami dla .NET 6 i XAML." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
-            <TextBlock Text="Autor Sławomir Zając nr albumu: 13352" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                <TextBlock Text="Wymagania systemowe:" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBlock Text=".NET 6 SDK" FontSize="12" Margin="0,0,0,3"/>
+                <TextBlock Text="MySQL Server" FontSize="12" Margin="0,0,0,3"/>
+                <TextBlock Text="Środowisko deweloperskie, takie jak Visual Studio lub Visual Studio Code, z zainstalowanymi odpowiednimi rozszerzeniami dla .NET 6 i XAML." FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                <TextBlock Text="Autor Sławomir Zając nr albumu: 13352" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,10"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
