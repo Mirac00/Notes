@@ -73,7 +73,7 @@ namespace Notes_UI
             }
         }
 
-        public static async Task<Note> AddNoteWithAuthentication(Note note)
+        public static async Task<Note> AddNote(Note note)
         {
             string json = JsonConvert.SerializeObject(note);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -91,7 +91,7 @@ namespace Notes_UI
             }
         }
 
-        public static async Task<Note> UpdateNoteWithAuthentication(Guid id, Note note)
+        public static async Task<Note> UpdateNote(Guid id, Note note)
         {
             string json = JsonConvert.SerializeObject(note);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -109,7 +109,7 @@ namespace Notes_UI
             }
         }
 
-        public static async Task DeleteNoteWithAuthentication(Guid id)
+        public static async Task DeleteNote(Guid id)
         {
             HttpResponseMessage response = await client.DeleteAsync($"Notes/{id}");
             if (!response.IsSuccessStatusCode)

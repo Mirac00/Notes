@@ -73,7 +73,7 @@ namespace Notes.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "user")]
+        //[Authorize(Roles = "user")]
         public async Task<IActionResult> DeleteNote([FromRoute] Guid id)
         {
             var existingNote = await TableDbContext.Notes.FindAsync(id);
