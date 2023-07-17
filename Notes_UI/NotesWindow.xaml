@@ -14,7 +14,7 @@
 
         <StackPanel Grid.Column="0">
             <StackPanel Orientation="Horizontal">
-                <Button Width="80" Height="50" Content="Dodaj notatkę" Click="AddNote_Click"/>
+                <Button x:Name="addNoteButton" Width="80" Height="50" Content="Dodaj notatkę" Click="AddNote_Click"/>
                 <Button x:Name="updateButton" Width="80" Height="50" Content="Zapisz" Click="UpdateNote_Click" Visibility="Collapsed"/>
                 <Button x:Name="deleteButton" Width="80" Height="50" Content="Usuń" Click="DeleteNote_Click" Visibility="Collapsed"/>
             </StackPanel>
@@ -41,4 +41,5 @@
         </StackPanel>
     </Grid>
 </Window>
+
 

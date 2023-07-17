@@ -13,20 +13,23 @@ namespace Notes_UI
 {
     public static class ApiClient
     {
-        private static CookieContainer cookieContainer = new CookieContainer();
-        private static HttpClientHandler handler = new HttpClientHandler { UseCookies = true, CookieContainer = cookieContainer };
-        private static HttpClient client = new HttpClient(handler);
+        private static CookieContainer cookieContainer;
+        private static HttpClient client;
 
-        static ApiClient()
+        public static void Initialize()
         {
+            cookieContainer = new CookieContainer();
+            var handler = new HttpClientHandler { UseCookies = true, CookieContainer = cookieContainer };
+            client = new HttpClient(handler);
+
             client.BaseAddress = new Uri("https://localhost:7202/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+
         public static void SetCookies(Uri uri, IEnumerable<Cookie> cookies)
         {
-            // Ustawienie plików cookie dla określonego URI
             foreach (var cookie in cookies)
             {
                 cookieContainer.Add(uri, cookie);
@@ -35,7 +38,6 @@ namespace Notes_UI
 
         public static string GetAntiForgeryCookie()
         {
-            // Pobranie wartości pliku cookie antyprzekierowania
             var cookies = cookieContainer.GetCookies(client.BaseAddress);
             var antiForgeryCookie = cookies[".AspNetCore.Antiforgery"]?.Value;
             return antiForgeryCookie;
@@ -71,7 +73,7 @@ namespace Notes_UI
             }
         }
 
-        public static async Task<Note> AddNote(Note note)
+        public static async Task<Note> AddNoteWithAuthentication(Note note)
         {
             string json = JsonConvert.SerializeObject(note);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -89,7 +91,7 @@ namespace Notes_UI
             }
         }
 
-        public static async Task<Note> UpdateNote(Guid id, Note note)
+        public static async Task<Note> UpdateNoteWithAuthentication(Guid id, Note note)
         {
             string json = JsonConvert.SerializeObject(note);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -107,7 +109,7 @@ namespace Notes_UI
             }
         }
 
-        public static async Task DeleteNote(Guid id)
+        public static async Task DeleteNoteWithAuthentication(Guid id)
         {
             HttpResponseMessage response = await client.DeleteAsync($"Notes/{id}");
             if (!response.IsSuccessStatusCode)
@@ -125,6 +127,7 @@ namespace Notes_UI
         public bool IsVisible { get; set; }
     }
 }
+
 
 
 

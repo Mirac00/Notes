@@ -40,13 +40,11 @@ namespace Notes_UI
                 startDatePicker.SelectedDate = SelectedEvent.StartDate;
                 endDatePicker.SelectedDate = SelectedEvent.EndDate;
 
-                // Show the Update and Delete buttons
                 updateButton.Visibility = Visibility.Visible;
                 deleteButton.Visibility = Visibility.Visible;
             }
             else
             {
-                // Hide the Update and Delete buttons
                 updateButton.Visibility = Visibility.Collapsed;
                 deleteButton.Visibility = Visibility.Collapsed;
             }

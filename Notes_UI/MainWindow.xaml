@@ -7,6 +7,8 @@
             <Button Content="Notatki" Click="OpenNotesWindow_Click"/>
             <Button Content="Wydarzenia" Click="OpenEventsWindow_Click" Height="33"/>
             <Button x:Name="LoginButton" Content="Zaloguj" Click="OpenLoginWindow_Click"/>
+            <Button Content="Zarejestruj" Click="OpenRegisterWindow_Click"/>
+            
             <Button x:Name="LogoutButton" Content="Wyloguj" Click="LogoutButton_Click" Visibility="Collapsed"/>
             <Label x:Name="LoggedInUserLabel" Content="" />
         </StackPanel>

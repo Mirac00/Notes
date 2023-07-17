@@ -46,12 +46,12 @@ namespace Notes_UI
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            // Wylogowanie użytkownika za pomocą API
+
             var response = await _client.PostAsync("https://localhost:7202/Account/logout", null);
 
             if (response.IsSuccessStatusCode)
             {
-                // Wyczyszczenie nazwy zalogowanego użytkownika i aktualizacja interfejsu użytkownika
+              
                 _loggedInUser = null;
                 UpdateUI();
             }
@@ -60,19 +60,22 @@ namespace Notes_UI
                 MessageBox.Show("Logout failed.");
             }
         }
+        private void OpenRegisterWindow_Click(object sender, RoutedEventArgs e)
+        {
+            var registerWindow = new RegisterWindow();
+            registerWindow.ShowDialog();
+        }
 
         private void UpdateUI()
         {
             if (!string.IsNullOrEmpty(_loggedInUser))
             {
-                // Użytkownik jest zalogowany
                 LoginButton.Visibility = Visibility.Collapsed;
                 LogoutButton.Visibility = Visibility.Visible;
                 LoggedInUserLabel.Content = $"Zalogowany jako: {_loggedInUser}";
             }
             else
             {
-                // Użytkownik nie jest zalogowany
                 LoginButton.Visibility = Visibility.Visible;
                 LogoutButton.Visibility = Visibility.Collapsed;
                 LoggedInUserLabel.Content = "";

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
+
+using Notes_UI.Services;
 
 namespace Notes_UI
 {
@@ -15,10 +18,10 @@ namespace Notes_UI
             InitializeComponent();
             DataContext = this;
 
-            // Zapisanie nazwy zalogowanego użytkownika
             _loggedInUser = loggedInUser;
-
+            ApiClient.Initialize();
             RefreshNotes();
+            UpdateUI();
         }
 
         private async void RefreshNotes()
@@ -42,13 +45,11 @@ namespace Notes_UI
                 titleTextBox.Text = SelectedNote.Title;
                 descriptionTextBox.Text = SelectedNote.Description;
 
-                // Pokaż przyciski Aktualizuj i Usuń
                 updateButton.Visibility = Visibility.Visible;
                 deleteButton.Visibility = Visibility.Visible;
             }
             else
             {
-                // Ukryj przyciski Aktualizuj i Usuń
                 updateButton.Visibility = Visibility.Collapsed;
                 deleteButton.Visibility = Visibility.Collapsed;
             }
@@ -56,22 +57,37 @@ namespace Notes_UI
 
         private async void AddNote_Click(object sender, RoutedEventArgs e)
         {
-            Note newNote = new Note
+            if (!string.IsNullOrEmpty(_loggedInUser))
             {
-                Title = titleTextBox.Text,
-                Description = descriptionTextBox.Text,
-                IsVisible = true
-            };
+                Note newNote = new Note
+                {
+                    Title = titleTextBox.Text,
+                    Description = descriptionTextBox.Text,
+                    IsVisible = true
+                };
 
-            try
-            {
-                Note addedNote = await ApiClient.AddNote(newNote);
-                MessageBox.Show($"Note added with ID: {addedNote.Id}", "Note Added", MessageBoxButton.OK, MessageBoxImage.Information);
-                RefreshNotes();
+                try
+                {
+                    Note addedNote = await ApiClient.AddNoteWithAuthentication(newNote);
+                    if (addedNote != null)
+                    {
+                        MessageBox.Show($"Note added with ID: {addedNote.Id}", "Note Added", MessageBoxButton.OK, MessageBoxImage.Information);
+                        RefreshNotes();
+                        ClearNoteFields();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to add note. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error adding note: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Error adding note: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("You need to log in to add a note.", "Login Required", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -84,9 +100,17 @@ namespace Notes_UI
 
                 try
                 {
-                    Note updatedNote = await ApiClient.UpdateNote(SelectedNote.Id, SelectedNote);
-                    MessageBox.Show($"Note updated with ID: {updatedNote.Id}", "Note Updated", MessageBoxButton.OK, MessageBoxImage.Information);
-                    RefreshNotes();
+                    Note updatedNote = await ApiClient.UpdateNoteWithAuthentication(SelectedNote.Id, SelectedNote);
+                    if (updatedNote != null)
+                    {
+                        MessageBox.Show($"Note updated with ID: {updatedNote.Id}", "Note Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                        RefreshNotes();
+                        ClearNoteFields();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to update note. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -104,9 +128,10 @@ namespace Notes_UI
                 {
                     try
                     {
-                        await ApiClient.DeleteNote(SelectedNote.Id);
+                        await ApiClient.DeleteNoteWithAuthentication(SelectedNote.Id);
                         MessageBox.Show($"Note deleted with ID: {SelectedNote.Id}", "Note Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
                         RefreshNotes();
+                        ClearNoteFields();
                     }
                     catch (Exception ex)
                     {
@@ -118,13 +143,35 @@ namespace Notes_UI
 
         private void GoBack_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
+            MainWindow mainWindow = new MainWindow(_loggedInUser);
             mainWindow.Show();
             Close();
         }
 
+        private void UpdateUI()
+        {
+            if (!string.IsNullOrEmpty(_loggedInUser))
+            {
+                addNoteButton.IsEnabled = true;
+            }
+            else
+            {
+                addNoteButton.IsEnabled = false;
+            }
+        }
+
+        private void ClearNoteFields()
+        {
+            titleTextBox.Text = string.Empty;
+            descriptionTextBox.Text = string.Empty;
+        }
     }
 }
+
+
+
+
+
 
 
 
